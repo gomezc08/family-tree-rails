@@ -1,0 +1,77 @@
+<%= form_with(model: person) do |form| %>
+  <% if person.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(person.errors.count, "error") %> prohibited this person from being saved:</h2>
+
+      <ul>
+        <% person.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :first_name, style: "display: block" %>
+    <%= form.text_field :first_name %>
+  </div>
+
+  <div>
+    <%= form.label :last_name, style: "display: block" %>
+    <%= form.text_field :last_name %>
+  </div>
+
+  <div>
+    <%= form.label :birthday, style: "display: block" %>
+    <%= form.date_field :birthday %>
+  </div>
+
+  <div>
+    <%= form.label :date_died, style: "display: block" %>
+    <%= form.date_field :date_died %>
+  </div>
+
+  <div>
+    <%= form.label :gender, style: "display: block" %>
+    <%= form.text_field :gender %>
+  </div>
+
+  <div>
+    <%= form.label :email, style: "display: block" %>
+    <%= form.text_field :email %>
+  </div>
+
+  <div>
+    <%= form.label :cell, style: "display: block" %>
+    <%= form.text_field :cell %>
+  </div>
+
+  <div>
+    <%= form.label :cityborn, style: "display: block" %>
+    <%= form.text_field :cityborn %>
+  </div>
+
+  <div>
+    <%= form.label :stateborn, style: "display: block" %>
+    <%= form.text_field :stateborn %>
+  </div>
+
+  <div>
+    <%= form.label :citycurrent, style: "display: block" %>
+    <%= form.text_field :citycurrent %>
+  </div>
+
+  <div>
+    <%= form.label :statecurrent, style: "display: block" %>
+    <%= form.text_field :statecurrent %>
+  </div>
+
+  <div>
+    <%= form.label :picture, style: "display: block" %>
+    <%= form.file_field :picture %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>
