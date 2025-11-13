@@ -1,0 +1,142 @@
+<div id="<%= dom_id user %>" class="profile-card animate-fade-in-up">
+  <!-- Profile Header with Image -->
+  <div class="profile-header">
+    <% if user.picture.attached? %>
+      <%= image_tag user.picture, class: "profile-image-large mx-auto", alt: "#{user.first_name} #{user.last_name}" %>
+    <% else %>
+      <div class="profile-placeholder-large mx-auto">
+        <%= (user.first_name.presence || user.email[0]).upcase[0] %>
+      </div>
+    <% end %>
+
+    <h2 class="profile-name">
+      <%= "#{user.first_name} #{user.last_name}".strip.presence || user.email.split('@').first %>
+    </h2>
+
+    <% if user.date_died %>
+      <div class="mt-2">
+        <span class="badge bg-secondary" style="font-size: 0.9rem; padding: 0.5rem 1rem;">
+          <%= user.birthday.strftime("%Y") if user.birthday %> - <%= user.date_died.strftime("%Y") %>
+        </span>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Bio Section -->
+  <% if user.bio.present? %>
+    <div class="profile-bio mt-4 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title text-primary-custom mb-3">About</h5>
+          <p class="card-text" style="white-space: pre-wrap;"><%= user.bio %></p>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Profile Body with Details -->
+  <div class="profile-body">
+    <div class="row">
+      <div class="col-md-6">
+        <h5 class="mb-3 text-primary-custom">Personal Information</h5>
+
+        <div class="profile-info-item">
+          <span class="profile-info-label">Full Name</span>
+          <span class="profile-info-value">
+            <%= "#{user.first_name} #{user.last_name}".strip.presence || "Not provided" %>
+          </span>
+        </div>
+
+        <div class="profile-info-item">
+          <span class="profile-info-label">Email</span>
+          <span class="profile-info-value"><%= user.email %></span>
+        </div>
+
+        <div class="profile-info-item">
+          <span class="profile-info-label">Gender</span>
+          <span class="profile-info-value"><%= user.gender.presence || "Not specified" %></span>
+        </div>
+
+        <div class="profile-info-item">
+          <span class="profile-info-label">Phone</span>
+          <span class="profile-info-value"><%= user.cell.presence || "Not provided" %></span>
+        </div>
+
+        <% if user.birthday %>
+          <div class="profile-info-item">
+            <span class="profile-info-label">Birthday</span>
+            <span class="profile-info-value">
+              <%= user.birthday.strftime("%B %d, %Y") %>
+            </span>
+          </div>
+
+          <div class="profile-info-item">
+            <span class="profile-info-label">Age</span>
+            <span class="profile-info-value">
+              <% if user.date_died %>
+                <%= ((user.date_died - user.birthday) / 365.25).to_i %> years (at passing)
+              <% else %>
+                <%= ((Date.today - user.birthday) / 365.25).to_i %> years
+              <% end %>
+            </span>
+          </div>
+        <% end %>
+
+        <% if user.date_died %>
+          <div class="profile-info-item">
+            <span class="profile-info-label">Date of Passing</span>
+            <span class="profile-info-value">
+              <%= user.date_died.strftime("%B %d, %Y") %>
+            </span>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="col-md-6">
+        <h5 class="mb-3 text-primary-custom">Location Information</h5>
+
+        <div class="profile-info-item">
+          <span class="profile-info-label">Place of Birth</span>
+          <span class="profile-info-value">
+            <%= [user.cityborn, user.stateborn].compact.join(', ').presence || "Not provided" %>
+          </span>
+        </div>
+
+        <div class="profile-info-item">
+          <span class="profile-info-label">Current Location</span>
+          <span class="profile-info-value">
+            <%= [user.citycurrent, user.statecurrent].compact.join(', ').presence || "Not provided" %>
+          </span>
+        </div>
+
+        <% if user.cityborn %>
+          <div class="profile-info-item">
+            <span class="profile-info-label">Birth City</span>
+            <span class="profile-info-value"><%= user.cityborn %></span>
+          </div>
+        <% end %>
+
+        <% if user.stateborn %>
+          <div class="profile-info-item">
+            <span class="profile-info-label">Birth State</span>
+            <span class="profile-info-value"><%= user.stateborn %></span>
+          </div>
+        <% end %>
+
+        <% if user.citycurrent %>
+          <div class="profile-info-item">
+            <span class="profile-info-label">Current City</span>
+            <span class="profile-info-value"><%= user.citycurrent %></span>
+          </div>
+        <% end %>
+
+        <% if user.statecurrent %>
+          <div class="profile-info-item">
+            <span class="profile-info-label">Current State</span>
+            <span class="profile-info-value"><%= user.statecurrent %></span>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

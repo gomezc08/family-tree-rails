@@ -1,0 +1,104 @@
+<%= form_with(model: user) do |form| %>
+  <% if user.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(user.errors.count, "error") %> prohibited this profile from being saved:</h2>
+
+      <ul>
+        <% user.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= form.label :first_name, style: "display: block" %>
+    <%= form.text_field :first_name %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :last_name, style: "display: block" %>
+    <%= form.text_field :last_name %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :bio, "Bio (max 100 words)", style: "display: block" %>
+    <%= form.text_area :bio, rows: 4, placeholder: "Tell us a bit about yourself...", class: "form-control" %>
+    <small class="form-text text-muted">
+      <span id="word-count">0</span> / 100 words
+    </small>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const bioField = document.querySelector('textarea[name="user[bio]"]');
+      const wordCountDisplay = document.getElementById('word-count');
+
+      function updateWordCount() {
+        const text = bioField.value.trim();
+        const wordCount = text === '' ? 0 : text.split(/\s+/).length;
+        wordCountDisplay.textContent = wordCount;
+
+        if (wordCount > 100) {
+          wordCountDisplay.style.color = 'red';
+        } else {
+          wordCountDisplay.style.color = 'inherit';
+        }
+      }
+
+      if (bioField) {
+        bioField.addEventListener('input', updateWordCount);
+        updateWordCount(); // Initial count
+      }
+    });
+  </script>
+
+  <div class="form-group">
+    <%= form.label :birthday, style: "display: block" %>
+    <%= form.date_field :birthday %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :date_died, style: "display: block" %>
+    <%= form.date_field :date_died %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :gender, style: "display: block" %>
+    <%= form.text_field :gender %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :cell, style: "display: block" %>
+    <%= form.text_field :cell %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :cityborn, "City of Birth", style: "display: block" %>
+    <%= form.text_field :cityborn %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :stateborn, "State of Birth", style: "display: block" %>
+    <%= form.text_field :stateborn %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :citycurrent, "Current City", style: "display: block" %>
+    <%= form.text_field :citycurrent %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :statecurrent, "Current State", style: "display: block" %>
+    <%= form.text_field :statecurrent %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :picture, "Profile Picture", style: "display: block" %>
+    <%= form.file_field :picture %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

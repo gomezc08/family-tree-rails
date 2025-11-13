@@ -1,0 +1,71 @@
+<% content_for :title, "Pending Relationship Requests" %>
+
+<div class="page-header">
+  <div class="page-header-content">
+    <h1>Pending Relationship Requests</h1>
+    <p class="page-description">Review and approve relationships that others have requested with you</p>
+  </div>
+</div>
+
+<% if @pending_requests.any? %>
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>From</th>
+          <th>Relationship Type</th>
+          <th>Date Requested</th>
+          <th>Notes</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @pending_requests.each do |request| %>
+          <tr>
+            <td>
+              <strong><%= request.user.display_name %></strong>
+              <br>
+              <small class="text-muted"><%= request.user.email %></small>
+            </td>
+            <td>
+              <span class="badge badge-warning">
+                <%= request.relationship_type.humanize %>
+              </span>
+              <br>
+              <small class="text-muted">
+                You will be their <%= request.reciprocal_type.humanize %>
+              </small>
+            </td>
+            <td>
+              <%= request.created_at.strftime("%B %d, %Y") %>
+              <br>
+              <small class="text-muted"><%= time_ago_in_words(request.created_at) %> ago</small>
+            </td>
+            <td>
+              <%= request.notes.present? ? request.notes : "-" %>
+            </td>
+            <td>
+              <div class="btn-group" role="group">
+                <%= button_to "Approve", approve_relationship_path(request),
+                    method: :patch,
+                    class: "btn btn-sm btn-success",
+                    data: { confirm: "Are you sure you want to approve this relationship?" } %>
+                <%= button_to "Reject", reject_relationship_path(request),
+                    method: :patch,
+                    class: "btn btn-sm btn-danger",
+                    data: { confirm: "Are you sure you want to reject this relationship?" } %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <div class="empty-state">
+    <div class="empty-state-icon">📭</div>
+    <h3>No Pending Requests</h3>
+    <p>You don't have any pending relationship requests at the moment.</p>
+    <%= link_to "View All Relationships", relationships_path, class: "btn btn-primary" %>
+  </div>
+<% end %>

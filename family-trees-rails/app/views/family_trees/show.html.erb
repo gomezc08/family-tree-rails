@@ -1,0 +1,125 @@
+<% content_for :title, "My Family Tree" %>
+
+<div class="container mt-4">
+  <div class="page-header animate-fade-in-up">
+    <div>
+      <h1>My Family Tree</h1>
+      <p class="text-muted mb-0">Explore your family connections and relationships</p>
+    </div>
+    <div class="page-header-actions">
+      <%= link_to new_relationship_path, class: "btn btn-success" do %>
+        Add Relationship
+      <% end %>
+      <%= link_to relationships_path, class: "btn btn-primary" do %>
+        Manage Relationships
+      <% end %>
+    </div>
+  </div>
+
+  <% if @parents.any? || @siblings.any? || @children.any? || @spouse.present? || @extended_family.any? %>
+
+    <!-- Immediate Family Section -->
+    <div class="family-section animate-fade-in-up">
+      <div class="section-header">
+        <h2 class="section-title">
+          <i class="bi bi-people-fill me-2"></i>
+          Immediate Family
+        </h2>
+        <p class="section-description">Your closest family members</p>
+      </div>
+
+      <% if @parents.any? || @siblings.any? || @children.any? || @spouse.present? %>
+        <!-- Parents -->
+        <% if @parents.any? %>
+          <div class="family-subsection">
+            <h3 class="subsection-title">
+              <i class="bi bi-person-hearts me-2"></i>
+              Parents
+            </h3>
+            <div class="members-grid">
+              <% @parents.each do |parent| %>
+                <%= render partial: 'family_member_card', locals: { family_member: parent, current_user: current_user } %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+
+        <!-- Spouse/Partner -->
+        <% if @spouse.present? %>
+          <div class="family-subsection">
+            <h3 class="subsection-title">
+              <i class="bi bi-heart-fill me-2"></i>
+              Spouse/Partner
+            </h3>
+            <div class="members-grid">
+              <%= render partial: 'family_member_card', locals: { family_member: @spouse, current_user: current_user } %>
+            </div>
+          </div>
+        <% end %>
+
+        <!-- Siblings -->
+        <% if @siblings.any? %>
+          <div class="family-subsection">
+            <h3 class="subsection-title">
+              <i class="bi bi-people me-2"></i>
+              Siblings
+            </h3>
+            <div class="members-grid">
+              <% @siblings.each do |sibling| %>
+                <%= render partial: 'family_member_card', locals: { family_member: sibling, current_user: current_user } %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+
+        <!-- Children -->
+        <% if @children.any? %>
+          <div class="family-subsection">
+            <h3 class="subsection-title">
+              <i class="bi bi-person-plus-fill me-2"></i>
+              Children
+            </h3>
+            <div class="members-grid">
+              <% @children.each do |child| %>
+                <%= render partial: 'family_member_card', locals: { family_member: child, current_user: current_user } %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="empty-subsection">
+          <p class="text-muted mb-3">No immediate family members added yet</p>
+          <%= link_to "Add Immediate Family", new_relationship_path, class: "btn btn-sm btn-success" %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Extended Family Section -->
+    <% if @extended_family.any? %>
+      <div class="family-section animate-fade-in-up">
+        <div class="section-header">
+          <h2 class="section-title">
+            <i class="bi bi-diagram-3-fill me-2"></i>
+            Extended Family
+          </h2>
+          <p class="section-description">Grandparents, grandchildren, aunts, uncles, cousins, and other relatives</p>
+        </div>
+
+        <div class="members-grid">
+          <% @extended_family.each do |family_member| %>
+            <%= render partial: 'family_member_card', locals: { family_member: family_member, current_user: current_user } %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+  <% else %>
+    <!-- Empty State -->
+    <div class="empty-state animate-fade-in-up">
+      <div class="empty-state-icon">🌳</div>
+      <h3>No Family Relationships Found</h3>
+      <p>You don't have any family relationships added yet. Get started by adding your first relationship!</p>
+      <%= link_to "Add Your First Relationship", new_relationship_path, class: "btn btn-success btn-lg" %>
+    </div>
+  <% end %>
+</div>
