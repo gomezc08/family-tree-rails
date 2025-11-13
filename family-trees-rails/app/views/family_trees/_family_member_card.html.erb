@@ -1,0 +1,65 @@
+<div class="family-member-card">
+  <!-- Profile Image or Placeholder -->
+  <% if family_member.picture.attached? %>
+    <%= image_tag family_member.picture, class: "profile-image", alt: "#{family_member.first_name} #{family_member.last_name}" %>
+  <% else %>
+    <div class="placeholder-image">
+      <%= (family_member.first_name.presence || family_member.email[0]).upcase[0] %>
+    </div>
+  <% end %>
+
+  <!-- Member Name -->
+  <div class="member-name">
+    <%= "#{family_member.first_name} #{family_member.last_name}".strip.presence || family_member.email.split('@').first %>
+    <% if family_member.date_died %>
+      <span class="deceased-badge d-block mt-2">Deceased</span>
+    <% end %>
+  </div>
+
+  <!-- Relationship Badge -->
+  <% relationship = current_user.relationships.approved.find_by(relative_id: family_member.id) ||
+                    current_user.inverse_relationships.approved.find_by(user_id: family_member.id) %>
+  <% if relationship %>
+    <div class="text-center mt-2">
+      <span class="badge bg-info" style="font-size: 0.8rem; padding: 0.4rem 0.8rem;">
+        <%= relationship.relationship_type.humanize %>
+      </span>
+    </div>
+  <% end %>
+
+  <!-- Member Details -->
+  <div class="member-details mt-3">
+    <% if family_member.birthday %>
+      <div class="mb-2">
+        <strong>Born:</strong> <%= family_member.birthday.strftime("%B %d, %Y") %>
+      </div>
+      <div class="mb-2">
+        <strong>Age:</strong>
+        <% if family_member.date_died %>
+          <%= ((family_member.date_died - family_member.birthday) / 365.25).to_i %> years (at passing)
+        <% else %>
+          <%= ((Date.today - family_member.birthday) / 365.25).to_i %> years
+        <% end %>
+      </div>
+    <% end %>
+
+    <% if family_member.citycurrent || family_member.statecurrent %>
+      <div class="mb-2">
+        <strong>Location:</strong>
+        <%= [family_member.citycurrent, family_member.statecurrent].compact.join(', ').presence || "N/A" %>
+      </div>
+    <% end %>
+
+    <% if family_member.email %>
+      <div class="mb-2 text-truncate">
+        <strong>Email:</strong>
+        <small><%= family_member.email %></small>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Actions -->
+  <div class="mt-auto pt-3">
+    <%= link_to "View Profile", family_member, class: "btn btn-primary w-100" %>
+  </div>
+</div>

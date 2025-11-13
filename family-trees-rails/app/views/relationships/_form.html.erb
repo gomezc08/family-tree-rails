@@ -1,0 +1,100 @@
+<%= form_with(model: relationship, local: true, class: "needs-validation") do |form| %>
+  <% if relationship.errors.any? %>
+    <div class="alert alert-danger">
+      <h4 class="alert-heading">
+        <%= pluralize(relationship.errors.count, "error") %> prohibited this relationship from being saved:
+      </h4>
+      <ul class="mb-0">
+        <% relationship.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= form.label :relative_id, "Who are you adding?", class: "form-label" %>
+    <%= form.select :relative_id,
+        options_for_select(@users.map { |u| ["#{u.display_name} - #{u.email}", u.id] }, relationship.relative_id),
+        { prompt: "Select a person from your family" },
+        { class: "form-select", required: true, id: "user-select" } %>
+    <div class="form-text">
+      Search or scroll to find the family member you want to connect with.
+    </div>
+  </div>
+
+  <script>
+    // Make the select searchable using built-in browser functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const selectElement = document.getElementById('user-select');
+      if (selectElement) {
+        // Set size to make it more like a searchable list
+        selectElement.setAttribute('size', '1');
+      }
+    });
+  </script>
+
+  <div class="mb-3">
+    <%= form.label :relationship_type, "How are they related to you?", class: "form-label" %>
+    <%= form.select :relationship_type,
+        grouped_options_for_select([
+          ["Parent-Child", [
+            ["They are my Parent", "parent"],
+            ["They are my Child", "child"],
+            ["They are my Biological Parent", "biological_parent"],
+            ["They are my Biological Child", "biological_child"],
+            ["They are my Adoptive Parent", "adoptive_parent"],
+            ["They are my Adoptive Child", "adoptive_child"],
+            ["They are my Step Parent", "step_parent"],
+            ["They are my Step Child", "step_child"]
+          ]],
+          ["Spousal", [
+            ["They are my Spouse", "spouse"],
+            ["They are my Ex-Spouse", "ex_spouse"],
+            ["They are my Partner", "partner"],
+            ["They are my Ex-Partner", "ex_partner"]
+          ]],
+          ["Siblings", [
+            ["They are my Sibling", "sibling"],
+            ["They are my Half-Sibling", "half_sibling"],
+            ["They are my Step-Sibling", "step_sibling"]
+          ]]
+        ], relationship.relationship_type),
+        { prompt: "Select how they're related to you" },
+        { class: "form-select", required: true } %>
+    <div class="form-text">
+      Example: If you select "They are my Parent", then they will automatically see you as their "Child". They need to approve this request before it appears in your family tree.
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <%= form.label :start_date, "Start Date", class: "form-label" %>
+      <%= form.date_field :start_date, class: "form-control" %>
+      <div class="form-text">
+        Optional: Birth date for parent-child, marriage date for spouses, etc.
+      </div>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <%= form.label :end_date, "End Date", class: "form-label" %>
+      <%= form.date_field :end_date, class: "form-control" %>
+      <div class="form-text">
+        Optional: For ended relationships (divorce, death, etc.)
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :notes, "Notes", class: "form-label" %>
+    <%= form.text_area :notes, rows: 3, class: "form-control" %>
+    <div class="form-text">
+      Optional: Add any additional information about this relationship.
+    </div>
+  </div>
+
+  <div class="d-flex gap-2">
+    <%= form.submit class: "btn btn-primary" %>
+    <%= link_to "Cancel", relationships_path, class: "btn btn-secondary" %>
+  </div>
+<% end %>

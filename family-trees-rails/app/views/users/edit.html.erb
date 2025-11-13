@@ -1,0 +1,12 @@
+<% content_for :title, "Editing Profile" %>
+
+<h1>Edit Your Profile</h1>
+
+<%= render "form", user: @user %>
+
+<br>
+
+<div>
+  <%= link_to "View Profile", @user %> |
+  <%= link_to "Back to Family Tree", family_tree_path %>
+</div>

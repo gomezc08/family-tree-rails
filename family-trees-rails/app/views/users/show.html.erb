@@ -1,0 +1,12 @@
+<div class="container mt-4">
+  <%= render @user %>
+
+  <!-- Action Buttons -->
+  <% if current_user == @user %>
+    <div class="d-flex gap-3 flex-wrap mt-4 animate-fade-in-up">
+      <%= link_to edit_user_path(@user), class: "btn btn-primary" do %>
+        Edit Profile
+      <% end %>
+    </div>
+  <% end %>
+</div>
